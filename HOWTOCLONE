@@ -1,0 +1,5 @@
+# local
+#git clone file://${HOME}/git/st.git
+#git remote add origin file://${HOME}/git/st.git
+# record pass
+#eval `ssh-agent`
