@@ -5,7 +5,9 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "FiraCode Nerd Font Mono:size=27:hinting=true:hintstyle=Regular:minspace=False";
+
+static char *font = "InconsolataLGC Nerd Font Mono:size=27:hinting=true:hintstyle=Regular:minspace=False";
+// static char *font = "FiraCode Nerd Font Mono:size=27:hinting=true:hintstyle=Regular:minspace=False";
 /* Spare fonts */
 static char *font2[] = {
     "Hack Nerd Font:pixelsize=27:antialias=true:autohint=true", // Powerline
