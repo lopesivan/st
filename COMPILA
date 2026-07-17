@@ -1,0 +1,178 @@
+O principal problema é que você atribuiu `THEMA` várias vezes:
+
+```make
+THEMA = MATRIX
+THEMA = DRACULA
+...
+THEMA = AMBER
+```
+
+No Make, cada atribuição substitui a anterior. Portanto, somente `AMBER` é usado. Também recomendo o nome inglês `THEME`.
+
+Use este `config.mk` completo:
+
+```make
+# st version
+VERSION = 0.8.4
+
+# --------------------------------------------------------------------
+# Theme
+# --------------------------------------------------------------------
+
+# Available themes:
+# CLASSIC, MATRIX, DRACULA, NORD, GRUVBOX,
+# SOLARIZED_DARK, TOKYO_NIGHT, AMBER
+#
+# Override from the command line:
+#   make clean
+#   make THEME=NORD
+THEME ?= MATRIX
+
+THEMES := \
+	CLASSIC \
+	MATRIX \
+	DRACULA \
+	NORD \
+	GRUVBOX \
+	SOLARIZED_DARK \
+	TOKYO_NIGHT \
+	AMBER
+
+# Reject unknown theme names.
+ifeq ($(filter $(THEME),$(THEMES)),)
+$(error Invalid theme '$(THEME)'. Available themes: $(THEMES))
+endif
+
+# --------------------------------------------------------------------
+# Installation paths
+# --------------------------------------------------------------------
+
+PREFIX    ?= /usr/local
+MANPREFIX ?= $(PREFIX)/share/man
+
+X11INC ?= /usr/X11R6/include
+X11LIB ?= /usr/X11R6/lib
+
+# --------------------------------------------------------------------
+# Dependencies
+# --------------------------------------------------------------------
+
+PKG_CONFIG ?= pkg-config
+
+PACKAGES := fontconfig freetype2 harfbuzz
+
+PKG_CFLAGS := $(shell $(PKG_CONFIG) --cflags $(PACKAGES))
+PKG_LIBS   := $(shell $(PKG_CONFIG) --libs $(PACKAGES))
+
+INCS := \
+	-I$(X11INC) \
+	$(PKG_CFLAGS)
+
+LIBS := \
+	-L$(X11LIB) \
+	-lm \
+	-lrt \
+	-lX11 \
+	-lutil \
+	-lXft \
+	-lXrender \
+	$(PKG_LIBS)
+
+# --------------------------------------------------------------------
+# Compiler and linker
+# --------------------------------------------------------------------
+
+CC ?= cc
+
+CPPFLAGS += \
+	-DVERSION=\"$(VERSION)\" \
+	-D_XOPEN_SOURCE=600
+
+# CLASSIC is selected automatically when no theme macro is defined.
+ifneq ($(THEME),CLASSIC)
+CPPFLAGS += -D$(THEME)
+endif
+
+CFLAGS += \
+	-std=c99 \
+	-O2 \
+	-Wall \
+	-Wextra \
+	-Wpedantic
+
+STCPPFLAGS := $(CPPFLAGS)
+STCFLAGS   := $(INCS) $(STCPPFLAGS) $(CFLAGS)
+STLDFLAGS  := $(LDFLAGS) $(LIBS)
+
+# --------------------------------------------------------------------
+# OpenBSD example
+# --------------------------------------------------------------------
+
+# CPPFLAGS += -D_BSD_SOURCE
+# LIBS := \
+#	-L$(X11LIB) \
+#	-lm \
+#	-lX11 \
+#	-lutil \
+#	-lXft \
+#	$(shell $(PKG_CONFIG) --libs fontconfig freetype2)
+```
+
+Agora o tema padrão é:
+
+```make
+THEME ?= MATRIX
+```
+
+O operador `?=` significa: use `MATRIX` somente se `THEME` não tiver sido informado externamente.
+
+Assim, você pode selecionar o tema sem editar o arquivo:
+
+```bash
+make clean
+make THEME=DRACULA
+```
+
+Ou:
+
+```bash
+make clean
+make THEME=TOKYO_NIGHT
+```
+
+Para o tema original:
+
+```bash
+make clean
+make THEME=CLASSIC
+```
+
+Se digitar um tema inexistente:
+
+```bash
+make THEME=XPTO
+```
+
+o Make interromperá com uma mensagem clara:
+
+```text
+Invalid theme 'XPTO'. Available themes: ...
+```
+
+Também agrupei as consultas ao `pkg-config`:
+
+```make
+PACKAGES := fontconfig freetype2 harfbuzz
+```
+
+Isso reduz as flags repetidas de FreeType e outras dependências que apareciam na saída anterior.
+
+Há ainda uma correção importante em relação ao seu original. Você tinha:
+
+```make
+-lXrender\
+       `pkg-config ...`
+```
+
+Sem espaço antes da barra, o resultado seguinte poderia ser concatenado a `-lXrender`. Na nova versão, cada biblioteca ocupa sua própria linha, eliminando essa ambiguidade.
+
