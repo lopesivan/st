@@ -121,4 +121,14 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+st
+st.0
+st.amber
+st.classic
+st.dracula
+st.gruvbox
+st.matrix
+st.nord
+st.solarized_dark
+st.tokyo_night
 # End of https://www.toptal.com/developers/gitignore/api/c
