@@ -1,0 +1,98 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I/usr/X11R6/include",
+      "-I/usr/include/harfbuzz",
+      "-I/usr/include/freetype2",
+      "-I/usr/include/libpng16",
+      "-I/usr/include/glib-2.0",
+      "-I/usr/lib/x86_64-linux-gnu/glib-2.0/include",
+      "-DVERSION=\"0.8.4\"",
+      "-D_XOPEN_SOURCE=600",
+      "-DAMBER",
+      "-O1",
+      "-std=c99",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-c",
+      "st.c"
+    ],
+    "directory": "/home/linuxbrew/.linuxbrew/Cellar/ivan/st",
+    "file": "/home/linuxbrew/.linuxbrew/Cellar/ivan/st/st.c"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I/usr/X11R6/include",
+      "-I/usr/include/harfbuzz",
+      "-I/usr/include/freetype2",
+      "-I/usr/include/libpng16",
+      "-I/usr/include/glib-2.0",
+      "-I/usr/lib/x86_64-linux-gnu/glib-2.0/include",
+      "-DVERSION=\"0.8.4\"",
+      "-D_XOPEN_SOURCE=600",
+      "-DAMBER",
+      "-O1",
+      "-std=c99",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-c",
+      "x.c"
+    ],
+    "directory": "/home/linuxbrew/.linuxbrew/Cellar/ivan/st",
+    "file": "/home/linuxbrew/.linuxbrew/Cellar/ivan/st/x.c"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I/usr/X11R6/include",
+      "-I/usr/include/harfbuzz",
+      "-I/usr/include/freetype2",
+      "-I/usr/include/libpng16",
+      "-I/usr/include/glib-2.0",
+      "-I/usr/lib/x86_64-linux-gnu/glib-2.0/include",
+      "-DVERSION=\"0.8.4\"",
+      "-D_XOPEN_SOURCE=600",
+      "-DAMBER",
+      "-O1",
+      "-std=c99",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-c",
+      "boxdraw.c"
+    ],
+    "directory": "/home/linuxbrew/.linuxbrew/Cellar/ivan/st",
+    "file": "/home/linuxbrew/.linuxbrew/Cellar/ivan/st/boxdraw.c"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I/usr/X11R6/include",
+      "-I/usr/include/harfbuzz",
+      "-I/usr/include/freetype2",
+      "-I/usr/include/libpng16",
+      "-I/usr/include/glib-2.0",
+      "-I/usr/lib/x86_64-linux-gnu/glib-2.0/include",
+      "-DVERSION=\"0.8.4\"",
+      "-D_XOPEN_SOURCE=600",
+      "-DAMBER",
+      "-O1",
+      "-std=c99",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-c",
+      "hb.c"
+    ],
+    "directory": "/home/linuxbrew/.linuxbrew/Cellar/ivan/st",
+    "file": "/home/linuxbrew/.linuxbrew/Cellar/ivan/st/hb.c"
+  }
+]
