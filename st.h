@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <sys/types.h>
+#include <time.h>
 
 /* macros */
 #define MIN(a, b)		((a) < (b) ? (a) : (b))
@@ -11,15 +12,20 @@
 #define DIVCEIL(n, d)		(((n) + ((d) - 1)) / (d))
 #define DEFAULT(a, b)		(a) = (a) ? (a) : (b)
 #define LIMIT(x, a, b)		(x) = (x) < (a) ? (a) : (x) > (b) ? (b) : (x)
-#define ATTRCMP(a, b)		(((a).mode & (~ATTR_WRAP) & (~ATTR_LIGA)) != ((b).mode & (~ATTR_WRAP) & (~ATTR_LIGA)) || \
-				(a).fg != (b).fg || \
-				(a).bg != (b).bg)
-#define TIMEDIFF(t1, t2)	((t1.tv_sec-t2.tv_sec)*1000 + \
-				(t1.tv_nsec-t2.tv_nsec)/1E6)
 #define MODBIT(x, set, bit)	((set) ? ((x) |= (bit)) : ((x) &= ~(bit)))
 
 #define TRUECOLOR(r,g,b)	(1 << 24 | (r) << 16 | (g) << 8 | (b))
 #define IS_TRUECOL(x)		(1 << 24 & (x))
+
+/* ANSI color ranges for cleaner code */
+#define ANSI_FG_MIN     30
+#define ANSI_FG_MAX     37
+#define ANSI_BG_MIN     40
+#define ANSI_BG_MAX     47
+#define ANSI_BRIGHT_FG_MIN 90
+#define ANSI_BRIGHT_FG_MAX 97
+#define ANSI_BRIGHT_BG_MIN 100
+#define ANSI_BRIGHT_BG_MAX 107
 
 enum glyph_attribute {
 	ATTR_NULL       = 0,
@@ -79,6 +85,63 @@ typedef union {
 	const void *v;
 	const char *s;
 } Arg;
+
+/* Inline helper functions for better type safety and readability */
+
+/**
+ * attrcmp - Compare glyph attributes (ignoring WRAP and LIGA flags)
+ * @a: First glyph
+ * @b: Second glyph
+ * Returns: 1 if attributes differ, 0 otherwise
+ */
+static inline int attrcmp(Glyph a, Glyph b)
+{
+	return ((a.mode & (~ATTR_WRAP) & (~ATTR_LIGA)) != (b.mode & (~ATTR_WRAP) & (~ATTR_LIGA)) ||
+            a.fg != b.fg || a.bg != b.bg);
+}
+
+/**
+ * timediff - Calculate difference between two timespec values in milliseconds
+ * @t1: First timespec (newer)
+ * @t2: Second timespec (older)
+ * Returns: Difference in milliseconds
+ */
+static inline long timediff(struct timespec t1, struct timespec t2)
+{
+	return (t1.tv_sec - t2.tv_sec) * 1000 + (t1.tv_nsec - t2.tv_nsec) / 1E6;
+}
+
+/**
+ * is_ansi_fg_color - Check if attribute value is standard ANSI foreground color
+ */
+static inline int is_ansi_fg_color(int attr)
+{
+	return BETWEEN(attr, ANSI_FG_MIN, ANSI_FG_MAX);
+}
+
+/**
+ * is_ansi_bg_color - Check if attribute value is standard ANSI background color
+ */
+static inline int is_ansi_bg_color(int attr)
+{
+	return BETWEEN(attr, ANSI_BG_MIN, ANSI_BG_MAX);
+}
+
+/**
+ * is_ansi_bright_fg - Check if attribute value is bright ANSI foreground
+ */
+static inline int is_ansi_bright_fg(int attr)
+{
+	return BETWEEN(attr, ANSI_BRIGHT_FG_MIN, ANSI_BRIGHT_FG_MAX);
+}
+
+/**
+ * is_ansi_bright_bg - Check if attribute value is bright ANSI background
+ */
+static inline int is_ansi_bright_bg(int attr)
+{
+	return BETWEEN(attr, ANSI_BRIGHT_BG_MIN, ANSI_BRIGHT_BG_MAX);
+}
 
 void die(const char *, ...);
 void redraw(void);
